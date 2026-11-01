@@ -1,0 +1,1 @@
+CloudCart Kubernetes autoscaling currently targets 80% CPU. The threshold was changed from 70%, but the reason is not recorded in the available project sources.

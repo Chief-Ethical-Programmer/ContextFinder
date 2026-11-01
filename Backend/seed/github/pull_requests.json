@@ -1,0 +1,4 @@
+[
+  {"id":"pr-104","kind":"pr","title":"Track Terraform migration","author":"Alex","body":"Three of eleven modules are merged. The rollback procedure is documented in the operations handbook.","merged":true},
+  {"id":"pr-109","kind":"pr","title":"Adjust autoscaling threshold","author":"Alex","body":"Changed the CPU threshold from 70% to 80%. No reason was recorded in this change.","merged":true}
+]

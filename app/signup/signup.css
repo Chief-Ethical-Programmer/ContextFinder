@@ -1,0 +1,7 @@
+.signup-panel .signup-form{gap:9px}
+.signup-panel .signup-form>label{margin-top:4px}
+.signup-access-note{margin:20px 0;padding:14px 16px;border:1px solid var(--line);border-radius:9px;background:var(--canvas);color:var(--muted);font-size:13px;line-height:1.65}
+.signup-link-button{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:20px}
+.auth-account-link{margin:18px 0 0;color:var(--muted);font-size:13px}
+.auth-account-link a{color:var(--teal);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+@media(max-width:700px){.signup-panel .signup-form{gap:8px}.auth-account-link{font-size:14px}}

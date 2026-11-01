@@ -1,0 +1,28 @@
+.theme-toggle{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:36px;padding:0 10px;border:1px solid #e6eaed;border-radius:8px;background:#fff;color:#596a79;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap}
+.theme-toggle:hover{background:#f5f8f7;color:#2c655e}
+html[data-theme="dark"]{color-scheme:dark;--ink:#e4ebf2;--muted:#b3bfcb;--line:#364351;--paper:#1d2935;--canvas:#111a23;--teal:#83c9b8;--navy:#e7edf3;--mint:#203a38;--amber:#e3b66f;background:var(--canvas);color:var(--ink)}
+html[data-theme="dark"] body{background:var(--canvas);color:var(--ink)}
+html[data-theme="dark"] :is(.topbar,.app-footer,.environment-pill,.role-switcher,.project-filter-bar,.admin-summary-strip,.transition-board,.board-column,.transition-card,.team-empty-state,.project-roster,.project-member,.admin-note,.admin-audit-link,.setup-card,.setup-stepper,.setup-step,.setup-form-step,.setup-info-box,.source-permission-note,.source-selected,.pipeline-stages,.review-claim-card,.review-filter-row,.review-proposal-banner,.review-sticky-footer,.versions-drawer,.version-drawer,.version-entry,.approved-info-card,.approved-remarks-card,.approved-people-card,.exit-hero,.exit-progress-chip,.leaver-label-note,.exit-question-card,.exit-question-top,.system-found,.exit-evidence-snippet,.exit-secondary-action,.exit-submit-bar,.exit-submitted-panel,.onboarding-panel,.handover-claim-mini,.timeline-panel,.onboarding-timeline-panel,.acknowledgement-panel,.hidden-items-notice,.reviewer-remarks-text,.evidence-panel,.evidence-panel-record,.continuation-plan-hero,.continuation-role-chip,.plan-guidance,.plan-milestone-card,.audit-list,.audit-entry,.placeholder-card,.onboarding-gate-card,.loading-panel,.login-panel,.auth-main,.login-input-wrap,.login-role-select-wrap,.foundation-panel,.foundation-principle,.foundation-next,.rail-card,.trust-guide,.metric-card,.handover-card,.claim-card,.claim-evidence-item,.demo-banner,.privacy-note,.review-modal,.review-dialog){background-color:#1b2733!important;border-color:#354351!important;color:#e1e8ef}
+html[data-theme="dark"] :is(.exit-hero,.continuation-plan-hero){background-image:none!important}
+html[data-theme="dark"] :is(.board-column,.column-cards,.claim-card,.review-claims-list,.onboarding-layout,.overview-rail,.foundation-grid){background-color:#151f29}
+html[data-theme="dark"] :is(h1,h2,h3,h4,h5,strong,.brand-name,.welcome-row h1,.admin-welcome h1,.section-heading h2,.column-heading h3,.transition-card h3,.project-roster-heading h2,.login-panel h2,.approved-hero h1,.review-title-row h1,.onboarding-header h1){color:#edf3f8}
+html[data-theme="dark"] :is(p,small,label,time,.breadcrumb,.welcome-copy,.eyebrow,.mini-label,.board-updated,.column-heading span,.transition-person span,.transition-card-bottom,.departing-card-stats,.project-member-copy small,.project-roster-heading p,.audit-footnote,.login-intro,.auth-main-foot,.review-subtitle,.onboarding-summary-text,.plan-milestone-card>p,.app-footer){color:#b1bdc9}
+html[data-theme="dark"] :is(a,.text-link,.transition-card-link,.empty-state-action,.admin-audit-link a,.plan-footer-note>a){color:#8ed0c1}
+html[data-theme="dark"] :is(input,select,textarea,.setup-input,.setup-select,.review-search,.onboarding-role-picker select){background-color:#121b24!important;border-color:#435260!important;color:#edf3f8!important}
+html[data-theme="dark"] input::placeholder,html[data-theme="dark"] textarea::placeholder{color:#8998a7}
+html[data-theme="dark"] :is(.theme-toggle,.role-switcher,.avatar-button,.button-secondary,.clear-filters-button,.review-action-button,.review-ask-button,.versions-open-button,.icon-close-button,.password-toggle){background-color:#24313e!important;border-color:#43515e!important;color:#e4ebf2!important}
+html[data-theme="dark"] :is(.theme-toggle,.role-switcher):hover{background-color:#2a3946!important}
+html[data-theme="dark"] :is(.exit-error,.onboarding-error,.feedback-error){background:#3b2425!important;border-color:#694143!important;color:#f1b8b7}
+html[data-theme="dark"] :is(.exit-success,.onboarding-success,.feedback-success){background:#20352d!important;border-color:#365747!important;color:#b7ddc4}
+html[data-theme="dark"] .auth-page{background:#111a23}
+html[data-theme="dark"] .auth-main{background:#151f29}
+html[data-theme="dark"] .auth-aside{background:#102f2d}
+html[data-theme="dark"] .environment-pill{color:#c2ccd5}
+html[data-theme="dark"] .topbar-divider{background:#394653}
+html[data-theme="dark"] :is(.status-review,.review-status-pending){background:#392f21;color:#f0c77e;border-color:#59472c}
+html[data-theme="dark"] .review-status-approved,.status-approved{background:#203b32;color:#a2d4b8;border-color:#315344}
+html[data-theme="dark"] .badge{filter:brightness(.88) saturate(.9)}
+html[data-theme="dark"] .auth-aside-content,html[data-theme="dark"] .auth-aside-content :is(h1,p,strong,small){color:#edf5f1}
+html[data-theme="dark"] .app-footer{border-color:#354351}
+html[data-theme="dark"] :is(.project-roster-empty,.list-empty,.review-empty-state,.audit-empty){background-color:#18232d;color:#bdc7d0}
+@media(max-width:700px){.theme-toggle{width:36px;padding:0}.theme-toggle span{display:none}.topbar-right{gap:8px}}

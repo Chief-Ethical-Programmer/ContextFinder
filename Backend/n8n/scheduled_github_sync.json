@@ -1,0 +1,11 @@
+{
+  "name": "ContextFinder scheduled GitHub sync",
+  "nodes": [
+    {"parameters": {"rule": {"interval": [{"field": "hours", "hoursInterval": 1}]}}, "name": "Every hour", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1, "position": [260, 300]},
+    {"parameters": {"method": "POST", "url": "={{$env.CONTEXTFINDER_API_URL}}/api/v1/internal/sync/{{$env.CONTEXTFINDER_TRANSITION_ID}}", "sendHeaders": true, "headerParameters": {"parameters": [{"name": "X-Service-Token", "value": "={{$env.N8N_SERVICE_TOKEN}}"}]}}, "name": "Sync sources", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4, "position": [520, 300]}
+  ],
+  "connections": {"Every hour": {"main": [[{"node": "Sync sources", "type": "main", "index": 0}]]}},
+  "active": false,
+  "settings": {},
+  "versionId": "contextfinder-scheduled-sync"
+}

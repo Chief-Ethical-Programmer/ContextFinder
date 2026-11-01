@@ -1,0 +1,44 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: contextfinder
+      POSTGRES_PASSWORD: contextfinder
+      POSTGRES_DB: contextfinder
+    ports:
+      - "${POSTGRES_HOST_PORT:-5433}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U contextfinder -d contextfinder"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - contextfinder_pgdata:/var/lib/postgresql/data
+
+  api:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://contextfinder:contextfinder@postgres:5432/contextfinder
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+
+  n8n:
+    image: n8nio/n8n:latest
+    profiles: ["n8n"]
+    ports:
+      - "5678:5678"
+    environment:
+      N8N_SECURE_COOKIE: "false"
+      CONTEXTFINDER_API_URL: http://api:8000
+      N8N_SERVICE_TOKEN: ${N8N_SERVICE_TOKEN:-development-only-service-token}
+    depends_on:
+      - api
+
+volumes:
+  contextfinder_pgdata:
+
+  

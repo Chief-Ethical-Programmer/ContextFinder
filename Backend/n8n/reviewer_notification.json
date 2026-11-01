@@ -1,0 +1,11 @@
+{
+  "name": "ContextFinder reviewer notification",
+  "nodes": [
+    {"parameters": {"httpMethod": "POST", "path": "contextfinder-reviewer-notification", "responseMode": "onReceived"}, "name": "Review webhook", "type": "n8n-nodes-base.webhook", "typeVersion": 2, "position": [260, 300]},
+    {"parameters": {"method": "POST", "url": "={{$env.CONTEXTFINDER_API_URL}}/api/v1/internal/notify-reviewer", "sendHeaders": true, "headerParameters": {"parameters": [{"name": "X-Service-Token", "value": "={{$env.N8N_SERVICE_TOKEN}}"}]}}, "name": "Log notification", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4, "position": [520, 300]}
+  ],
+  "connections": {"Review webhook": {"main": [[{"node": "Log notification", "type": "main", "index": 0}]]}},
+  "active": false,
+  "settings": {},
+  "versionId": "contextfinder-reviewer-notification"
+}
