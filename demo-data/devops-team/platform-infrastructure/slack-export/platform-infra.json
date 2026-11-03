@@ -1,0 +1,8 @@
+[
+  {"user":"Alex","ts":"2026-09-14T09:05:00Z","text":"Quick inventory: 10 of the 11 Terraform modules are in the shared layout. audit-store merged yesterday; edge-cache is the only one left."},
+  {"user":"Priya","ts":"2026-09-14T09:12:00Z","text":"The README still says 9 modules. Please attach the merged plan or commit before changing the handover claim."},
+  {"user":"Alex","ts":"2026-09-14T09:20:00Z","text":"PR checks only run plan. A platform admin runs production apply manually after the change window is approved."},
+  {"user":"Ryan","ts":"2026-09-14T09:24:00Z","text":"I saw an Actions job called apply-prod in the workflow list. Does it apply automatically after approval?"},
+  {"user":"Priya","ts":"2026-09-14T09:31:00Z","text":"No one has verified the state restore steps for a partial migration. Leave rollback as an open question until we have evidence."},
+  {"user":"Alex","ts":"2026-09-14T10:02:00Z","text":"The fictional state bucket is demo-atlas-tfstate. The lock table name in the README is probably old; I need to check the current backend config."}
+]

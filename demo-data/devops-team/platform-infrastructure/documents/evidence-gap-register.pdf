@@ -1,0 +1,48 @@
+%PDF-1.4
+% synthetic demo
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+5 0 obj
+<< /Length 501 >>
+stream
+BT
+/F1 10 Tf
+50 750 Td
+(PLATFORM INFRASTRUCTURE - EVIDENCE GAP REGISTER) Tj
+0 -18 Td
+(1. Module count: README says 9/11; Slack and PR draft say 10/11.) Tj
+0 -18 Td
+(2. Apply owner: README says manual; Slack asks whether Actions applies.) Tj
+0 -18 Td
+(3. State lock table name is questioned in chat; verify configuration evidence.) Tj
+0 -18 Td
+(4. No tested restore procedure or recovery artifact is included.) Tj
+0 -18 Td
+(5. Synthetic only. Never use this as a real Terraform runbook.) Tj
+0 -18 Td
+ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000026 00000 n 
+0000000075 00000 n 
+0000000132 00000 n 
+0000000258 00000 n 
+0000000328 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+880
+%%EOF

@@ -37,16 +37,5 @@ class ChunkInput(BaseModel):
     text: str
     kind: str
     author: str = ""
-
-
-class ClaimLite(BaseModel):
-    id: UUID
-    statement: str
-    type: str
-    evidence_ids: list[UUID]
-
-
-class RoleViewDraft(BaseModel):
-    summary: str
-    plan_30_60_90: dict
-    claim_ids: list[UUID]
+    url: str | None = None
+    project_context: str = ""

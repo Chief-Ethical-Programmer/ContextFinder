@@ -21,6 +21,7 @@ class User(Base):
     name: Mapped[str] = mapped_column(String(200))
     password_hash: Mapped[str] = mapped_column(String(500))
     role: Mapped[str] = mapped_column(String(30), index=True)
+    team: Mapped[str] = mapped_column(String(120), default="")
 
 
 class Project(Base):
@@ -28,6 +29,7 @@ class Project(Base):
     id: Mapped[uuid.UUID] = uuid_pk()
     name: Mapped[str] = mapped_column(String(200), unique=True)
     description: Mapped[str] = mapped_column(Text, default="")
+    team: Mapped[str] = mapped_column(String(120), default="")
     synthetic: Mapped[bool] = mapped_column(Boolean, default=True)
 
 
@@ -39,15 +41,33 @@ class ProjectRole(Base):
     project_role: Mapped[str] = mapped_column(String(40))
 
 
+class ProjectRequest(Base):
+    __tablename__ = "project_requests"
+    id: Mapped[uuid.UUID] = uuid_pk()
+    name: Mapped[str] = mapped_column(String(200))
+    description: Mapped[str] = mapped_column(Text, default="")
+    team: Mapped[str] = mapped_column(String(120), default="")
+    requested_by: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    status: Mapped[str] = mapped_column(String(20), default="pending", index=True)
+    reviewed_by: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("users.id"), index=True)
+    reviewer_note: Mapped[str] = mapped_column(Text, default="")
+    project_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("projects.id", ondelete="SET NULL"), index=True)
+    transition_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("transitions.id", ondelete="SET NULL"), index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    reviewed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
 class Transition(Base):
     __tablename__ = "transitions"
     id: Mapped[uuid.UUID] = uuid_pk()
     project_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("projects.id"), index=True)
     departing_user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), index=True)
-    incoming_user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), index=True)
+    incoming_user_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), index=True)
+    reviewer_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), index=True)
     target_recipient_role: Mapped[str] = mapped_column(String(30))
     status: Mapped[str] = mapped_column(String(30), default="ingesting", index=True)
     due_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    incoming_access_expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), index=True)
     created_by: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 

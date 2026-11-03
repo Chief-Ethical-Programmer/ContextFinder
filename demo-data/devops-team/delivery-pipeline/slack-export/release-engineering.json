@@ -1,0 +1,8 @@
+[
+  {"user":"Alex","ts":"2026-09-18T13:02:00Z","text":"The workflow I tested used a 5% canary and waited 30 minutes. We made the promote decision manually in the release call."},
+  {"user":"Ryan","ts":"2026-09-18T13:08:00Z","text":"README says 10% and auto-promote after 15 minutes. Which config was actually deployed?"},
+  {"user":"Priya","ts":"2026-09-18T13:15:00Z","text":"Please don't resolve this from memory. We need the synthetic deployment record or workflow run attached."},
+  {"user":"Alex","ts":"2026-09-18T13:28:00Z","text":"Rollback is a manual helm rollback in the runbook. I have not seen the auto rollback alert wired to the release workflow."},
+  {"user":"Ryan","ts":"2026-09-18T13:35:00Z","text":"Who approves production promotion? I can find the deployment job but not an approval record."},
+  {"user":"Priya","ts":"2026-09-18T13:42:00Z","text":"Mark approval evidence missing and ask the release owner to provide it before publish."}
+]

@@ -27,7 +27,9 @@ export function OriginBadge({ origin }: { origin: Origin }) {
 }
 
 export function AccessBadge({ level }: { level: AccessLevel }) {
-  return <span className={`badge access-badge ${level === "Leads only" ? "access-restricted" : ""}`}><LockKeyhole size={12} aria-hidden="true" /><span>{level}</span></span>;
+  if (level === "Technical only") return null;
+  const description = level === "Leads only" ? "Visible to team leads and administrators" : "Visible to the project team";
+  return <span className={`badge access-badge ${level === "Leads only" ? "access-restricted" : ""}`} title={description} aria-label={`${level}. ${description}`}><LockKeyhole size={12} aria-hidden="true" /><span>{level}</span></span>;
 }
 
 export function TypeBadge({ children }: { children: React.ReactNode }) {

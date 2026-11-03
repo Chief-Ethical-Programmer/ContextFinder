@@ -1,5 +1,5 @@
 {
-  "project": "CloudCart",
+  "project": "Platform Infrastructure",
   "cases": [
     {"id": "terraform_conflict", "kind": "conflict", "description": "Slack says mostly done; repository shows 3 of 11 modules merged"},
     {"id": "rollback_missing", "kind": "missing_evidence", "description": "Rollback procedure referenced in a pull request but no document exists"},

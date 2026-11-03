@@ -1,0 +1,10 @@
+ATLAS PLATFORM — FICTIONAL MIGRATION CHECKLIST
+
+1. Check the current module inventory. There are 11 modules in total.
+2. Compare the README count (9 migrated) with the team chat count (10 migrated).
+3. Confirm the state backend and lock table from the current Terraform configuration.
+4. Save a plan artifact for review. The fixture does not include a real plan.
+5. Confirm whether production apply is manual or automated after approval.
+6. Ask Priya to review a recovery procedure before closing the state migration.
+
+This file contains fictional examples only. It is not an operational runbook.

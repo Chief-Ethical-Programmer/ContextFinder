@@ -1,6 +1,6 @@
 import re
 
-from app.llm.schemas import CandidateClaim, CandidateEvidence, ChunkInput, ClaimLite, RoleViewDraft
+from app.llm.schemas import CandidateClaim, CandidateEvidence, ChunkInput
 
 
 def _claim(chunk: ChunkInput, claim_type: str, statement: str, subject: str, status: str | None = None, excerpt: str | None = None, artifact: str | None = None, resolved: bool = True) -> CandidateClaim:
@@ -35,8 +35,14 @@ class FakeClient:
             claims.append(_claim(chunk, "decision", "The vendor renewal budget is approved at the lead level.", "vendor_renewal", "approved"))
         return claims
 
-    async def write_exit_question(self, claim: ClaimLite) -> str:
-        return f"Can you clarify this claim: {claim.statement}"
-
-    async def write_role_view(self, claims: list[ClaimLite], role: str) -> RoleViewDraft:
-        return RoleViewDraft(summary=f"{role.replace('_', ' ').title()} handover with {len(claims)} approved claims.", plan_30_60_90={"30": [], "60": [], "90": []}, claim_ids=[claim.id for claim in claims])
+    async def write_exit_questions(self, cases: list[dict]) -> dict[str, str]:
+        result = {}
+        for case in cases:
+            if case.get("missing_artifact"):
+                question = f"Where can the reviewer find the missing {case['missing_artifact']}, and does it support this claim: {case['statement']}?"
+            elif case.get("competing_claims"):
+                question = f"Which of these conflicting values is current, and what evidence confirms it: {case['statement']}?"
+            else:
+                question = f"How does this claim align with the uploaded proposed solution, and what evidence can confirm it: {case['statement']}?"
+            result[case["claim_id"]] = question
+        return result

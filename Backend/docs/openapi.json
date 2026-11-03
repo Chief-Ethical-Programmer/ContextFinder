@@ -46,6 +46,47 @@
         }
       }
     },
+    "/api/v1/auth/signup": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Signup",
+        "operationId": "signup_api_v1_auth_signup_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/auth/demo-switch": {
       "post": {
         "tags": [
@@ -111,6 +152,200 @@
             "HTTPBearer": []
           }
         ]
+      }
+    },
+    "/api/v1/project-requests": {
+      "post": {
+        "tags": [
+          "foundation"
+        ],
+        "summary": "Create Project Request",
+        "operationId": "create_project_request_api_v1_project_requests_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectRequestCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/project-requests/mine": {
+      "get": {
+        "tags": [
+          "foundation"
+        ],
+        "summary": "My Project Requests",
+        "operationId": "my_project_requests_api_v1_project_requests_mine_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/project-requests": {
+      "get": {
+        "tags": [
+          "foundation"
+        ],
+        "summary": "List Project Requests",
+        "operationId": "list_project_requests_api_v1_admin_project_requests_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/project-requests/{request_id}/submit": {
+      "post": {
+        "tags": [
+          "foundation"
+        ],
+        "summary": "Submit Project Request",
+        "operationId": "submit_project_request_api_v1_project_requests__request_id__submit_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Request Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/project-requests/{request_id}/decision": {
+      "post": {
+        "tags": [
+          "foundation"
+        ],
+        "summary": "Decide Project Request",
+        "operationId": "decide_project_request_api_v1_admin_project_requests__request_id__decision_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Request Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectRequestDecision"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/v1/projects": {
@@ -201,6 +436,30 @@
         }
       }
     },
+    "/api/v1/admin/incoming-candidates": {
+      "get": {
+        "tags": [
+          "foundation"
+        ],
+        "summary": "Incoming Candidates",
+        "operationId": "incoming_candidates_api_v1_admin_incoming_candidates_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
     "/api/v1/transitions": {
       "post": {
         "tags": [
@@ -245,6 +504,188 @@
             "HTTPBearer": []
           }
         ]
+      }
+    },
+    "/api/v1/admin/transitions/{transition_id}/reviewer": {
+      "put": {
+        "tags": [
+          "foundation"
+        ],
+        "summary": "Assign Transition Reviewer",
+        "operationId": "assign_transition_reviewer_api_v1_admin_transitions__transition_id__reviewer_put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "transition_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Transition Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewerAssignment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/transitions/{transition_id}/incoming": {
+      "put": {
+        "tags": [
+          "foundation"
+        ],
+        "summary": "Assign Transition Incoming",
+        "operationId": "assign_transition_incoming_api_v1_admin_transitions__transition_id__incoming_put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "transition_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Transition Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IncomingAssignment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reviewer/transitions": {
+      "get": {
+        "tags": [
+          "foundation"
+        ],
+        "summary": "Reviewer Transitions",
+        "operationId": "reviewer_transitions_api_v1_reviewer_transitions_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/transitions/{transition_id}/reviewer/revoke": {
+      "post": {
+        "tags": [
+          "foundation"
+        ],
+        "summary": "Revoke Transition Reviewer",
+        "operationId": "revoke_transition_reviewer_api_v1_admin_transitions__transition_id__reviewer_revoke_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "transition_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Transition Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/v1/transitions/{transition_id}": {
@@ -295,6 +736,144 @@
         }
       }
     },
+    "/api/v1/transitions/{transition_id}/summary": {
+      "get": {
+        "tags": [
+          "foundation"
+        ],
+        "summary": "Transition Summary",
+        "operationId": "transition_summary_api_v1_transitions__transition_id__summary_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "transition_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Transition Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/transitions/{transition_id}/sources": {
+      "get": {
+        "tags": [
+          "foundation"
+        ],
+        "summary": "Transition Sources",
+        "operationId": "transition_sources_api_v1_transitions__transition_id__sources_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "transition_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Transition Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/transitions/{transition_id}/audit": {
+      "get": {
+        "tags": [
+          "foundation"
+        ],
+        "summary": "Transition Audit",
+        "operationId": "transition_audit_api_v1_transitions__transition_id__audit_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "transition_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Transition Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/dashboard": {
       "get": {
         "tags": [
@@ -310,6 +889,30 @@
                 "schema": {
                   "$ref": "#/components/schemas/DashboardResponse"
                 }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/dashboard": {
+      "get": {
+        "tags": [
+          "foundation"
+        ],
+        "summary": "Admin Dashboard",
+        "operationId": "admin_dashboard_api_v1_admin_dashboard_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
               }
             }
           }
@@ -345,8 +948,74 @@
             }
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PipelineStartRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/transitions/{transition_id}/retry-analysis": {
+      "post": {
+        "tags": [
+          "ingestion"
+        ],
+        "summary": "Retry Analysis",
+        "operationId": "retry_analysis_api_v1_transitions__transition_id__retry_analysis_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "transition_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Transition Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PipelineStartRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
             "description": "Successful Response",
             "content": {
               "application/json": {
@@ -423,6 +1092,108 @@
         }
       }
     },
+    "/api/v1/transitions/{transition_id}/sources/configure": {
+      "post": {
+        "tags": [
+          "ingestion"
+        ],
+        "summary": "Configure Source",
+        "operationId": "configure_source_api_v1_transitions__transition_id__sources_configure_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "transition_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Transition Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SourceConfiguration"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/transitions/{transition_id}/free-tier-attestation": {
+      "post": {
+        "tags": [
+          "ingestion"
+        ],
+        "summary": "Attest Sources For Gemini",
+        "operationId": "attest_sources_for_gemini_api_v1_transitions__transition_id__free_tier_attestation_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "transition_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Transition Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/transitions/{transition_id}/pipeline": {
       "get": {
         "tags": [
@@ -430,6 +1201,52 @@
         ],
         "summary": "Pipeline Status",
         "operationId": "pipeline_status_api_v1_transitions__transition_id__pipeline_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "transition_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Transition Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/transitions/{transition_id}/source-intake": {
+      "get": {
+        "tags": [
+          "ingestion"
+        ],
+        "summary": "Source Intake",
+        "operationId": "source_intake_api_v1_transitions__transition_id__source_intake_get",
         "security": [
           {
             "HTTPBearer": []
@@ -593,6 +1410,52 @@
         }
       }
     },
+    "/api/v1/transitions/{transition_id}/review-evidence": {
+      "get": {
+        "tags": [
+          "claims"
+        ],
+        "summary": "Review Evidence",
+        "operationId": "review_evidence_api_v1_transitions__transition_id__review_evidence_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "transition_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Transition Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/claims/{claim_id}": {
       "get": {
         "tags": [
@@ -614,6 +1477,52 @@
               "type": "string",
               "format": "uuid",
               "title": "Claim Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/exit/{transition_id}/evidence": {
+      "get": {
+        "tags": [
+          "exit"
+        ],
+        "summary": "Exit Evidence",
+        "operationId": "exit_evidence_api_v1_exit__transition_id__evidence_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "transition_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Transition Id"
             }
           }
         ],
@@ -823,6 +1732,18 @@
             }
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "title": "Body"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -1227,13 +2148,71 @@
         }
       }
     },
-    "/api/v1/handover/{transition_id}": {
+    "/api/v1/admin/transitions/{transition_id}/final-approval": {
+      "post": {
+        "tags": [
+          "review"
+        ],
+        "summary": "Final Admin Approval",
+        "operationId": "final_admin_approval_api_v1_admin_transitions__transition_id__final_approval_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "transition_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Transition Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/transitions/{transition_id}/review-questions": {
       "get": {
         "tags": [
-          "handover"
+          "review"
         ],
-        "summary": "Handover",
-        "operationId": "handover_api_v1_handover__transition_id__get",
+        "summary": "Departing Review Questions",
+        "operationId": "departing_review_questions_api_v1_transitions__transition_id__review_questions_get",
         "security": [
           {
             "HTTPBearer": []
@@ -1273,13 +2252,71 @@
         }
       }
     },
-    "/api/v1/handover/{transition_id}/plan": {
+    "/api/v1/claims/{claim_id}/departing-response": {
+      "post": {
+        "tags": [
+          "review"
+        ],
+        "summary": "Respond To Review Question",
+        "operationId": "respond_to_review_question_api_v1_claims__claim_id__departing_response_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "claim_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Claim Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/handover/{transition_id}": {
       "get": {
         "tags": [
           "handover"
         ],
-        "summary": "Plan",
-        "operationId": "plan_api_v1_handover__transition_id__plan_get",
+        "summary": "Handover",
+        "operationId": "handover_api_v1_handover__transition_id__get",
         "security": [
           {
             "HTTPBearer": []
@@ -1294,6 +2331,22 @@
               "type": "string",
               "format": "uuid",
               "title": "Transition Id"
+            }
+          },
+          {
+            "name": "role",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Role"
             }
           }
         ],
@@ -1816,6 +2869,21 @@
         "type": "object",
         "title": "HTTPValidationError"
       },
+      "IncomingAssignment": {
+        "properties": {
+          "incomingEmail": {
+            "type": "string",
+            "maxLength": 320,
+            "minLength": 5,
+            "title": "Incomingemail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "incomingEmail"
+        ],
+        "title": "IncomingAssignment"
+      },
       "LoginRequest": {
         "properties": {
           "email": {
@@ -1834,6 +2902,100 @@
         ],
         "title": "LoginRequest"
       },
+      "PipelineStartRequest": {
+        "properties": {
+          "freeTierDataAttestation": {
+            "type": "boolean",
+            "title": "Freetierdataattestation"
+          }
+        },
+        "type": "object",
+        "required": [
+          "freeTierDataAttestation"
+        ],
+        "title": "PipelineStartRequest"
+      },
+      "ProjectMemberResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "role": {
+            "type": "string",
+            "title": "Role"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "email",
+          "role"
+        ],
+        "title": "ProjectMemberResponse"
+      },
+      "ProjectRequestCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 2,
+            "title": "Name"
+          },
+          "team": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 2,
+            "title": "Team"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 10,
+            "title": "Description"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "team",
+          "description"
+        ],
+        "title": "ProjectRequestCreate"
+      },
+      "ProjectRequestDecision": {
+        "properties": {
+          "decision": {
+            "type": "string",
+            "enum": [
+              "approve",
+              "reject"
+            ],
+            "title": "Decision"
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 2000,
+            "title": "Note",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "decision"
+        ],
+        "title": "ProjectRequestDecision"
+      },
       "ProjectResponse": {
         "properties": {
           "id": {
@@ -1849,9 +3011,32 @@
             "type": "string",
             "title": "Description"
           },
+          "team": {
+            "type": "string",
+            "title": "Team",
+            "default": ""
+          },
           "synthetic": {
             "type": "boolean",
             "title": "Synthetic"
+          },
+          "supervisor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Supervisor"
+          },
+          "members": {
+            "items": {
+              "$ref": "#/components/schemas/ProjectMemberResponse"
+            },
+            "type": "array",
+            "title": "Members"
           }
         },
         "type": "object",
@@ -1862,6 +3047,156 @@
           "synthetic"
         ],
         "title": "ProjectResponse"
+      },
+      "ReviewerAssignment": {
+        "properties": {
+          "reviewerId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewerid"
+          },
+          "reviewerEmail": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 320,
+                "minLength": 5
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Revieweremail"
+          }
+        },
+        "type": "object",
+        "title": "ReviewerAssignment"
+      },
+      "SignupRequest": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 2,
+            "title": "Name"
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 320,
+            "minLength": 3,
+            "title": "Email"
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 8,
+            "minLength": 6,
+            "title": "Password"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "admin",
+              "reviewer",
+              "departing",
+              "incoming"
+            ],
+            "title": "Role"
+          },
+          "team": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 120
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team"
+          },
+          "adminSignupCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Adminsignupcode"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "email",
+          "password",
+          "role"
+        ],
+        "title": "SignupRequest"
+      },
+      "SourceConfiguration": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "github",
+              "drive_export",
+              "meeting_notes"
+            ],
+            "title": "Kind"
+          },
+          "accessLevel": {
+            "type": "string",
+            "enum": [
+              "public_team",
+              "technical_only",
+              "leads_only"
+            ],
+            "title": "Accesslevel"
+          },
+          "config": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Config"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "accessLevel"
+        ],
+        "title": "SourceConfiguration"
+      },
+      "SourceSelection": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "accessLevel": {
+            "type": "string",
+            "title": "Accesslevel"
+          },
+          "config": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Config"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "accessLevel"
+        ],
+        "title": "SourceSelection"
       },
       "TokenResponse": {
         "properties": {
@@ -1898,8 +3233,15 @@
             "title": "Departinguserid"
           },
           "incomingUserId": {
-            "type": "string",
-            "format": "uuid",
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Incominguserid"
           },
           "targetRecipientRole": {
@@ -1918,13 +3260,19 @@
               }
             ],
             "title": "Dueat"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/SourceSelection"
+            },
+            "type": "array",
+            "title": "Sources"
           }
         },
         "type": "object",
         "required": [
           "projectId",
-          "departingUserId",
-          "incomingUserId"
+          "departingUserId"
         ],
         "title": "TransitionCreate"
       },
@@ -1946,8 +3294,15 @@
             "title": "Departinguserid"
           },
           "incomingUserId": {
-            "type": "string",
-            "format": "uuid",
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Incominguserid"
           },
           "targetRecipientRole": {
@@ -1969,6 +3324,18 @@
               }
             ],
             "title": "Dueat"
+          },
+          "incomingAccessExpiresAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Incomingaccessexpiresat"
           },
           "createdBy": {
             "type": "string",
@@ -2013,6 +3380,11 @@
           "role": {
             "type": "string",
             "title": "Role"
+          },
+          "team": {
+            "type": "string",
+            "title": "Team",
+            "default": ""
           }
         },
         "type": "object",

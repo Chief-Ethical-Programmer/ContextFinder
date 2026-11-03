@@ -1,0 +1,13 @@
+BEACON RELEASE — FICTIONAL HANDOVER NOTES
+
+Incoming maintainer: Ryan
+Departing maintainer: Alex
+Reviewer: Priya
+
+Known facts to verify:
+- README: 10 percent canary, 15 minute soak, automatic promotion.
+- Slack: 5 percent canary, 30 minute soak, manual promotion.
+- Runbook: manual rollback; chat says the automatic rollback is not wired.
+- No production approval record is attached.
+
+Use a synthetic workflow run as evidence. Do not run this fixture against any real cluster.

@@ -1,3 +1,4 @@
+from datetime import UTC, datetime, timedelta
 from uuid import UUID
 
 from fastapi import HTTPException
@@ -9,14 +10,18 @@ from app.db.models import (
     AuditEvent,
     ClaimEvidence,
     ClaimVersion,
+    ExitAnswer,
+    ExitQuestion,
     HandoverVersion,
     KnowledgeClaim,
+    ProjectRequest,
     ReviewEvent,
     RoleView,
     SourceConnection,
     SourceRecord,
     Transition,
 )
+from app.services.claim_filters import reviewable_claim_filter
 
 BLOCKING_LABELS = {"conflicting", "missing_evidence"}
 
@@ -32,6 +37,42 @@ async def claim_payload(db: AsyncSession, claim: KnowledgeClaim) -> dict:
     evidence_ids = list((await db.scalars(
         select(ClaimEvidence.id).where(ClaimEvidence.claim_id == claim.id)
     )).all())
+    flags = dict(claim.flags or {})
+    if not flags.get("departingResponse"):
+        answer = await db.scalar(
+            select(ExitAnswer)
+            .join(ExitQuestion, ExitQuestion.id == ExitAnswer.question_id)
+            .where(ExitQuestion.claim_id == claim.id, ExitAnswer.kind.in_({"answer", "dont_know"}))
+            .order_by(ExitAnswer.created_at.desc())
+            .limit(1)
+        )
+        if answer:
+            flags["departingResponse"] = "I don't know." if answer.kind == "dont_know" else answer.body
+    exit_questions = list((await db.scalars(
+        select(ExitQuestion).where(ExitQuestion.claim_id == claim.id).order_by(ExitQuestion.id)
+    )).all())
+    answer_rows = list((await db.execute(
+        select(ExitAnswer.question_id, ExitAnswer.body, ExitAnswer.kind)
+        .join(ExitQuestion, ExitQuestion.id == ExitAnswer.question_id)
+        .where(ExitQuestion.claim_id == claim.id)
+        .order_by(ExitAnswer.created_at.desc())
+    )).all())
+    answer_by_question: dict[UUID, tuple[str, str]] = {}
+    for question_id, body, kind in answer_rows:
+        answer_by_question.setdefault(question_id, (body or "", kind))
+    follow_ups = []
+    for question in exit_questions:
+        body, kind = answer_by_question.get(question.id, ("", ""))
+        status = "Answered" if question.status == "answered" and kind in {"answer", "dont_know"} else "Skipped" if question.status == "skipped" or kind == "skipped" else "Draft saved" if kind == "draft" else "Awaiting answer"
+        answer_text = "I don't know." if kind == "dont_know" and status == "Answered" else body if status == "Answered" else None
+        follow_ups.append({"source": "Gemini", "question": question.prompt, "answer": answer_text, "status": status})
+    if flags.get("reviewerQuestion"):
+        follow_ups.append({
+            "source": "Reviewer",
+            "question": str(flags["reviewerQuestion"]),
+            "answer": str(flags.get("departingResponse") or "") or None,
+            "status": "Answered" if flags.get("departingResponse") else "Awaiting answer",
+        })
     return {
         "id": claim.id,
         "transition_id": claim.transition_id,
@@ -46,7 +87,8 @@ async def claim_payload(db: AsyncSession, claim: KnowledgeClaim) -> dict:
         "review_state": claim.review_state,
         "current_version": claim.current_version,
         "occurred_at": claim.occurred_at,
-        "flags": claim.flags,
+        "flags": flags,
+        "followUps": follow_ups,
         "evidenceIds": [str(value) for value in evidence_ids],
     }
 
@@ -65,13 +107,16 @@ async def review_claim(
     evidence_ids: list[str] | None = None,
 ) -> KnowledgeClaim:
     if action == "approve":
-        if claim.trust_label in BLOCKING_LABELS:
-            raise HTTPException(status_code=422, detail="Blocking claims require individual resolution before approval")
+        if claim.trust_label in BLOCKING_LABELS and not note.strip():
+            raise HTTPException(status_code=422, detail="Add a human review note to approve a claim flagged for conflict or missing evidence")
         claim.review_state = "approved"
     elif action == "reject":
         claim.review_state = "rejected"
     elif action == "ask_more":
+        if not note.strip():
+            raise HTTPException(status_code=422, detail="Add a specific question for the departing member")
         claim.review_state = "needs_more"
+        claim.flags = {**(claim.flags or {}), "reviewerQuestion": note.strip(), "departingResponse": ""}
     elif action == "edit":
         if not statement or not statement.strip():
             raise HTTPException(status_code=422, detail="Edited statement is required")
@@ -130,13 +175,27 @@ async def review_claim(
     return claim
 
 
-async def publish_transition(db: AsyncSession, transition_id: UUID, reviewer_id: UUID, remarks: str, role: str) -> HandoverVersion:
-    claims = list((await db.scalars(select(KnowledgeClaim).where(KnowledgeClaim.transition_id == transition_id))).all())
-    blocking = [claim.id for claim in claims if claim.trust_label in BLOCKING_LABELS and claim.review_state != "rejected"]
+async def review_ready_claims(db: AsyncSession, transition_id: UUID) -> list[KnowledgeClaim]:
+    claims = list((await db.scalars(select(KnowledgeClaim).where(KnowledgeClaim.transition_id == transition_id, reviewable_claim_filter()))).all())
+    blocking = [claim.id for claim in claims if claim.trust_label in BLOCKING_LABELS and claim.review_state not in {"approved", "rejected"}]
     if blocking:
         raise HTTPException(status_code=409, detail={"code": "blocking_claims", "claimIds": blocking})
     if any(claim.review_state not in {"approved", "edited", "rejected"} for claim in claims):
-        raise HTTPException(status_code=409, detail="All published claims must be approved or edited")
+        raise HTTPException(status_code=409, detail="Every claim must be approved, edited, or rejected before submission")
+    if not claims:
+        raise HTTPException(status_code=409, detail="There are no claims to submit for approval")
+    return claims
+
+
+async def publish_transition(db: AsyncSession, transition_id: UUID, reviewer_id: UUID, remarks: str, role: str) -> HandoverVersion:
+    transition = await db.get(Transition, transition_id)
+    if not transition or transition.reviewer_id != reviewer_id:
+        raise HTTPException(status_code=404, detail="Transition not found")
+    if transition.status not in {"review", "awaiting_admin_approval"}:
+        raise HTTPException(status_code=409, detail="This handover is not currently open for reviewer approval")
+    if role not in {"project_lead", "technical_successor", "new_volunteer"}:
+        raise HTTPException(status_code=422, detail="Unsupported handover recipient role")
+    claims = await review_ready_claims(db, transition_id)
     publishable = [claim for claim in claims if claim.review_state in {"approved", "edited"}]
     latest = await db.scalar(select(func.max(HandoverVersion.version)).where(HandoverVersion.transition_id == transition_id))
     version = (latest or 0) + 1
@@ -152,10 +211,17 @@ async def publish_transition(db: AsyncSession, transition_id: UUID, reviewer_id:
     await db.flush()
     for recipient_role, allowed in (("project_lead", {"public_team", "technical_only", "leads_only"}), ("technical_successor", {"public_team", "technical_only"}), ("new_volunteer", {"public_team"})):
         visible = [claim for claim in publishable if claim.access_level in allowed]
-        db.add(RoleView(handover_version_id=handover.id, recipient_role=recipient_role, summary=f"{len(visible)} approved claims available for {recipient_role.replace('_', ' ')}.", plan_30_60_90={"30": [], "60": [], "90": []}, generation_mode="template", claim_ids=[str(claim.id) for claim in visible]))
-    db.add(AuditEvent(actor_id=reviewer_id, action="publish", entity_type="handover", transition_id=transition_id, detail={"version": version}))
-    transition = await db.get(Transition, transition_id)
-    if transition:
-        transition.status = "published"
+        db.add(RoleView(handover_version_id=handover.id, recipient_role=recipient_role, summary=f"{len(visible)} approved claims available for {recipient_role.replace('_', ' ')}.", generation_mode="template", claim_ids=[str(claim.id) for claim in visible]))
+    db.add(AuditEvent(actor_id=reviewer_id, action="reviewer_final_approval", entity_type="handover", transition_id=transition_id, detail={"version": version, "remarks": remarks}))
+    transition.status = "published"
+    if transition.incoming_user_id and not transition.incoming_access_expires_at:
+        transition.incoming_access_expires_at = datetime.now(UTC) + timedelta(days=30)
+        db.add(AuditEvent(actor_id=reviewer_id, action="incoming_access_granted", entity_type="transition", entity_id=transition.id, transition_id=transition.id, detail={"incoming_user_id": str(transition.incoming_user_id), "expires_at": transition.incoming_access_expires_at.isoformat(), "access_days": 30}))
+    project_request = await db.scalar(select(ProjectRequest).where(ProjectRequest.transition_id == transition_id))
+    if project_request:
+        project_request.status = "approved"
+        project_request.reviewed_by = reviewer_id
+        project_request.reviewer_note = remarks
+        project_request.reviewed_at = datetime.now(UTC)
     await db.flush()
     return handover

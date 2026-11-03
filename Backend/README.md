@@ -1,43 +1,22 @@
 # ContextFinder backend
 
-FastAPI backend for the ContextFinder knowledge handover demo.
+FastAPI backend for the authenticated ContextFinder handover workflow. Migrations run at container startup. The API does not seed sample projects, transitions, claims, or source records; uploaded source data is stored in PostgreSQL.
 
 ## Local setup
 
-1. Copy `.env.example` to `.env` and add secrets only locally.
-2. Start the API and PostgreSQL with Docker Compose; migrations and deterministic seed data run automatically. PostgreSQL is exposed on host port `5433` by default to avoid colliding with a local PostgreSQL installation; set `POSTGRES_HOST_PORT` to change it.
-3. For a host-run API, apply migrations, load the seed, and run Uvicorn manually.
+1. Copy `.env.example` to `.env` and provide a strong `JWT_SECRET`, `GEMINI_API_KEY`, and an `ADMIN_SIGNUP_CODE` if registering a new admin.
+2. Keep `DEMO_MODE=false` and `LLM_MODE=live` to disable demo login and use Gemini for source extraction.
+3. Start PostgreSQL and the API with Docker Compose. PostgreSQL is exposed on host port `5433` by default.
+4. Start the frontend in `../frontend` with `npm install` and `npm run dev`.
 
-API documentation is available at `/docs`; the OpenAPI contract is exported to `docs/openapi.json` after the API is running.
+API documentation is available at `/docs`; readiness is available at `/api/v1/ready`.
 
-## Demo accounts
+## Accounts and access
 
-The seeded demo accounts all use the password `contextfinder-demo`:
+Create accounts through the signup page and sign in through the login page. Admin registration requires `ADMIN_SIGNUP_CODE`. The demo-switch endpoint is disabled by default. Admins manage projects and assign reviewers; assigned reviewers can access only the transitions assigned to them.
 
-- `admin@cloudcart.demo`
-- `alex@cloudcart.demo`
-- `ryan@cloudcart.demo`
+## Source data and Gemini
 
-The seed creates the CloudCart and Empty Team Demo projects, with Morgan as the CloudCart/Empty Team supervisor, Alex as its departing member, and Ryan as its incoming member. It does not create a transition automatically: sign in as admin and create one for CloudCart before running ingestion and review. There is no separate reviewer account; review actions are performed by the project admin.
+Uploaded `.md`, `.txt`, `.docx`, or `.pdf` files are parsed into PostgreSQL. GitHub ingestion reads public repository metadata, README, issues, pull requests, and commits. Slack ingestion is not supported. When `LLM_MODE=live`, selected source text is sent to the configured Gemini model during extraction. Use only synthetic or approved material for the demo.
 
-The demo switch endpoint is available only when `DEMO_MODE=true`. The intended Round 2 deployment uses `ORCHESTRATOR=inline`; n8n remains optional. Docker startup applies migrations and loads synthetic seed data automatically. Enable the optional `n8n` Compose profile when needed.
-
-## Phase status
-
-Phase 1 provides the foundation, authentication, clearance helper, health/readiness endpoints, migrations, core project/transition endpoints, and CloudCart fixtures. Phase 2 adds fixture-backed GitHub ingestion, Slack/Drive/meeting-note parsing, secure uploads, secret redaction, duplicate skipping, and pipeline progress tracking. Phase 3 adds claim extraction, evidence validation, trust labels, conflict detection, access inheritance, Gemini support, and claim inspection endpoints. Phase 4 adds exit questions, reviewer actions, claim versioning, bulk-approval protection, and publish gates. Phase 5 adds permission-filtered role views, hidden-item counts, evidence access, access requests, and acknowledgements. Phase 6 adds protected n8n endpoints/workflows, structured errors, security headers, Docker startup automation, and the generated test report.
-
-See `docs/ROUND3_COMMITMENTS.md` for the three planned improvements and `docs/TEST_REPORT.md` for the generated QA summary.
-
-## Gemini configuration
-
-Keep the replacement key only in a local `.env` file, never in `.env.example` or source code:
-
-`GEMINI_API_KEY=...`
-
-Use `LLM_MODEL=gemini-2.5-flash` and `LLM_MODE=auto`. With no key, the cached/fake path keeps the synthetic demo running.
-
-## Source data and limits
-
-GitHub reads a configured repository when available and otherwise falls back to the bundled synthetic fixture dataset. Slack, Drive, and meeting-note sources can be imported as supported file uploads. When uploaded records exist for one of those source types, the pipeline does not mix in that type's synthetic fixture records. With no upload for a configured source, its bundled synthetic fixture supports the demo. Uploading a source enforces a 10 MB limit, parses supported formats, redacts recognized secrets, and stores records with the configured access label. After uploading, start the transition pipeline to extract claims for review. An existing source connection cannot silently change its access label on a later upload.
-
-Project, user, transition, upload, claim-review, publish, and recipient-view endpoints are API-backed. LocalStorage/browser state is not the persistence layer for these operations. Frontend screens must call the API with the bearer token and use the returned project/member/transition identifiers; synthetic seed data is provided for the demo.
+Parser fixtures under `seed/` are retained for backend development checks only. Docker images do not copy them, and the API startup does not load them. The optional user-uploadable fictional packs are separate under `../demo-data/devops-team`.

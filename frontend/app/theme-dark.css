@@ -1,0 +1,299 @@
+/* Dark theme coverage for intake, source upload, and shared workflow screens. */
+html[data-theme="dark"] .project-request-card,
+html[data-theme="dark"] .project-approval-queue,
+html[data-theme="dark"] .analysis-progress-panel,
+html[data-theme="dark"] .review-question-inbox,
+html[data-theme="dark"] .project-request-details {
+  background: #141e28 !important;
+  border-color: #2a3946 !important;
+  color: #e7edf3;
+}
+
+html[data-theme="dark"] .project-request-card h1,
+html[data-theme="dark"] .project-request-card h2,
+html[data-theme="dark"] .my-project-requests h2,
+html[data-theme="dark"] .project-approval-heading h2,
+html[data-theme="dark"] .project-approval-requester strong,
+html[data-theme="dark"] .project-request-details strong,
+html[data-theme="dark"] .review-question-inbox h3,
+html[data-theme="dark"] .review-question-inbox article strong,
+html[data-theme="dark"] .analysis-progress-heading strong {
+  color: #edf3f7;
+}
+
+html[data-theme="dark"] .project-request-card > p,
+html[data-theme="dark"] .project-request-form label,
+html[data-theme="dark"] .my-project-requests small,
+html[data-theme="dark"] .project-request-description,
+html[data-theme="dark"] .project-approval-heading p,
+html[data-theme="dark"] .project-approval-count,
+html[data-theme="dark"] .project-approval-requester span,
+html[data-theme="dark"] .project-approval-requester small,
+html[data-theme="dark"] .project-approval-requester p,
+html[data-theme="dark"] .project-request-details span,
+html[data-theme="dark"] .project-request-details small,
+html[data-theme="dark"] .project-request-workflow small,
+html[data-theme="dark"] .project-request-hint,
+html[data-theme="dark"] .source-status-notice,
+html[data-theme="dark"] .source-selected-files small,
+html[data-theme="dark"] .analysis-progress-panel p,
+html[data-theme="dark"] .analysis-progress-steps small,
+html[data-theme="dark"] .review-question-inbox > small,
+html[data-theme="dark"] .review-question-inbox article p,
+html[data-theme="dark"] .review-question-inbox article label {
+  color: #a9b6c1;
+}
+
+html[data-theme="dark"] .project-request-form input,
+html[data-theme="dark"] .project-request-form textarea,
+html[data-theme="dark"] .review-question-inbox textarea {
+  background: #0d151d !important;
+  border-color: #354653 !important;
+  color: #e7edf3 !important;
+}
+
+html[data-theme="dark"] .project-request-form input::placeholder,
+html[data-theme="dark"] .project-request-form textarea::placeholder,
+html[data-theme="dark"] .review-question-inbox textarea::placeholder {
+  color: #82919e;
+}
+
+html[data-theme="dark"] .project-request-workflow article,
+html[data-theme="dark"] .project-request-details,
+html[data-theme="dark"] .project-source-intake-list,
+html[data-theme="dark"] .analysis-progress-steps li,
+html[data-theme="dark"] .project-retry-panel,
+html[data-theme="dark"] .review-question-inbox article {
+  background-color: #101922;
+  border-color: #2a3946;
+}
+
+html[data-theme="dark"] .project-request-workflow strong,
+html[data-theme="dark"] .project-source-intake-list strong,
+html[data-theme="dark"] .project-source-intake-list span,
+html[data-theme="dark"] .source-selected-files span,
+html[data-theme="dark"] .analysis-progress-steps strong {
+  color: #dce5ec;
+}
+
+html[data-theme="dark"] .my-project-requests,
+html[data-theme="dark"] .my-project-requests article,
+html[data-theme="dark"] .previous-project-requests,
+html[data-theme="dark"] .previous-project-requests article,
+html[data-theme="dark"] .project-approval-item,
+html[data-theme="dark"] .review-question-inbox article {
+  border-color: #2a3946;
+}
+
+html[data-theme="dark"] .project-approval-actions button,
+html[data-theme="dark"] .review-question-inbox button,
+html[data-theme="dark"] .source-folder-picker {
+  background: #1b382e !important;
+  border-color: #315443 !important;
+  color: #a8d6b8 !important;
+}
+
+html[data-theme="dark"] .project-approval-actions .project-reject-button {
+  background: #392426 !important;
+  border-color: #654043 !important;
+  color: #efb4b3 !important;
+}
+
+html[data-theme="dark"] .project-request-success,
+html[data-theme="dark"] .project-decision-status {
+  color: #a8d6b8;
+}
+
+html[data-theme="dark"] .analysis-progress-track {
+  background: #293640;
+}
+
+html[data-theme="dark"] .analysis-progress-track > span {
+  background: #438b76;
+}
+
+html[data-theme="dark"] .login-project-request-link,
+html[data-theme="dark"] .login-project-request-link a {
+  color: #a9b6c1;
+}
+
+/* Keep the departing source uploader readable in dark mode, including native file controls. */
+html[data-theme="dark"] .departing-source-upload-inline,
+html[data-theme="dark"] .departing-source-upload-inline .project-source-intake-list,
+html[data-theme="dark"] .departing-source-upload-inline .project-retry-panel,
+html[data-theme="dark"] .departing-source-upload-inline .analysis-progress-panel {
+  background: #141e28 !important;
+  border-color: #2a3946 !important;
+  color: #e7edf3;
+}
+
+html[data-theme="dark"] .departing-source-upload-inline :is(.setup-form-title h1, .setup-form-title h2, .project-source-intake-list strong, .project-source-intake-list span, .source-selected-files span, .analysis-progress-heading strong, .analysis-progress-steps strong) {
+  color: #e7edf3;
+}
+
+html[data-theme="dark"] .departing-source-upload-inline :is(.setup-upload-control > label, .setup-upload-control > small, .source-selected-files small, .source-status-notice, .analysis-progress-panel p, .analysis-progress-steps small) {
+  color: #a9b6c1;
+}
+
+html[data-theme="dark"] .departing-source-upload-inline :is(input.setup-input, input[type="file"], .source-selected-files) {
+  background: #0d151d !important;
+  border-color: #354653 !important;
+  color: #e7edf3 !important;
+}
+
+html[data-theme="dark"] .departing-source-upload-inline input[type="file"]::file-selector-button {
+  background: #24313e;
+  border: 1px solid #43515e;
+  border-radius: 4px;
+  color: #e7edf3;
+  padding: 6px 9px;
+  margin-right: 9px;
+}
+
+html[data-theme="dark"] .departing-source-upload-inline .project-source-intake-list a {
+  color: #8ed0c1;
+}
+
+html[data-theme="dark"] .departing-source-upload-inline .setup-info-box {
+  background: #1c302a !important;
+  border-color: #365747;
+  color: #c7ddcf;
+}
+
+html[data-theme="dark"] .departing-source-upload-inline .source-permission-note {
+  background: #2a2b24 !important;
+  border-color: #514b32;
+  color: #ded2ad;
+}
+
+html[data-theme="dark"] .departing-source-upload-inline .setup-error {
+  color: #efaaa5;
+}
+
+html[data-theme="dark"] .reviewer-queue-people .reviewer-queue-arrow {
+  color: #8bd0bc;
+}
+
+html[data-theme="dark"] .reviewer-queue-people .incoming-assignment-note {
+  color: #a9b6c1;
+}
+
+html[data-theme="dark"] .review-followups-panel,
+html[data-theme="dark"] .review-followup-card {
+  background: #141e28 !important;
+  border-color: #2a3946 !important;
+  color: #e7edf3;
+}
+
+html[data-theme="dark"] .review-followups-heading strong,
+html[data-theme="dark"] .review-followup-question {
+  color: #e1e8ef;
+}
+
+html[data-theme="dark"] :is(.review-followups-heading small,.review-followups-counts,.review-followups-content section h2,.review-followup-claim>span) {
+  color: #a3b0bc;
+}
+
+html[data-theme="dark"] .review-followups-counts>span,
+html[data-theme="dark"] .review-followup-waiting {
+  background: #101922;
+  border-color: #2a3946;
+  color: #c0cbd4;
+}
+
+html[data-theme="dark"] .review-followup-answer {
+  background: #1b382e;
+  border-color: #438b76;
+}
+
+html[data-theme="dark"] .review-followup-answer :is(strong,p) {
+  color: #c8e2d2;
+}
+
+/* Keep auth fields flush with their dark input containers instead of black inset bars. */
+html[data-theme="dark"] .auth-page .login-panel {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"] .auth-page .login-input-wrap input,
+html[data-theme="dark"] .auth-page .login-role-select {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #e7edf3 !important;
+}
+
+html[data-theme="dark"] .auth-page .login-role-select {
+  color-scheme: dark;
+}
+
+html[data-theme="dark"] .auth-page .login-role-select option {
+  background-color: #1b2733 !important;
+  color: #e7edf3 !important;
+}
+
+html[data-theme="dark"] .auth-page .login-input-wrap input::placeholder {
+  color: #8fa0ae !important;
+  opacity: 1;
+}
+
+html[data-theme="dark"] .auth-page .login-input-wrap input:-webkit-autofill,
+html[data-theme="dark"] .auth-page .login-input-wrap input:-webkit-autofill:hover,
+html[data-theme="dark"] .auth-page .login-input-wrap input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #1b2733 inset !important;
+  -webkit-text-fill-color: #e7edf3 !important;
+  caret-color: #e7edf3;
+}
+
+html[data-theme="dark"] .review-followup-claim {
+  border-color: #2a3946;
+}
+
+html[data-theme="dark"] .review-followup-claim button {
+  color: #8bd0bc;
+}
+
+html[data-theme="dark"] .login-project-request-link a {
+  color: #8bd0bc;
+}
+
+html[data-theme="dark"] .setup-error {
+  color: #efb4b3;
+}
+html[data-theme="dark"] .review-claim-qa{border-color:#35443d;background:#202a25}
+html[data-theme="dark"] .review-claim-qa h4,html[data-theme="dark"] .review-claim-qa-question>span{color:#a4c5b1}
+html[data-theme="dark"] .review-claim-qa-question p{color:#e0e9e4}
+html[data-theme="dark"] .review-claim-qa-answer{border-left-color:#6fa589;background:#263a30}
+html[data-theme="dark"] .review-claim-qa-answer :is(strong,p){color:#d3e5d9}
+html[data-theme="dark"] .review-claim-qa-question,html[data-theme="dark"] .review-claim-qa-answer{border-color:#35443d;background:#252f39}
+html[data-theme="dark"] .review-claim-qa-answer{border-left-color:#6fa589;background:#263a30}
+html[data-theme="dark"] .review-claim-qa-question p{color:#e0e9e4}
+html[data-theme="dark"] .review-count-label{color:#afbdca}
+html[data-theme="dark"] .review-count-label strong{color:#ecf2f7}
+html[data-theme="dark"] .review-sort-label{border-color:#3b4753;background:#252f39;color:#c1ccd6}
+html[data-theme="dark"] .review-ai-finding-label{color:#9eabba}
+html[data-theme="dark"] .review-expand-label{color:#8bd0bc}
+html[data-theme="dark"] .review-answer-full p{color:#d3e5d9}
+html[data-theme="dark"] .review-claim-qa-layout>.review-card-actions{border-color:#35443d;background:#202a25}
+html[data-theme="dark"] .review-claim-qa-layout .review-ask-button{border-color:#46564c;background:#29352e;color:#c8dfd1}
+html[data-theme="dark"] .human-approval-modal{border-color:#3b5145;border-top-color:#6fa589;background:#202a25;color:#edf4ef;box-shadow:0 24px 80px #0008}
+html[data-theme="dark"] .human-approval-modal .review-modal-heading h2{color:#eef4f0}
+html[data-theme="dark"] .human-approval-modal .review-modal-heading p{color:#b8c7be}
+html[data-theme="dark"] .human-approval-modal>label{color:#e0eae4}
+html[data-theme="dark"] .human-approval-modal textarea{border-color:#46564c;background:#18211c;color:#edf4ef}
+html[data-theme="dark"] .human-approval-modal textarea::placeholder{color:#8d9e93}
+html[data-theme="dark"] .onboarding-page .onboarding-source-file{color:#aebbc6}
+html[data-theme="dark"] .onboarding-page .onboarding-source-file button,html[data-theme="dark"] .onboarding-page .onboarding-source-file>a,html[data-theme="dark"] .evidence-source-link{color:#9ad7c4}
+html[data-theme="dark"] .onboarding-page .onboarding-source-link,html[data-theme="dark"] .onboarding-page .onboarding-source-file button{color:#9ad7c4}
+html[data-theme="dark"] .onboarding-page .onboarding-source-files{border-left-color:#3a5146}
+html[data-theme="dark"] .onboarding-page .onboarding-source-file{color:#aebbc6}
+html[data-theme="dark"] .onboarding-page .onboarding-source-file button:hover,html[data-theme="dark"] .onboarding-page .evidence-source-link:hover{background:#20342c}
+html[data-theme="dark"] .onboarding-page .onboarding-source-file>a,html[data-theme="dark"] .onboarding-page .evidence-source-link{border-color:#3c5849}
+html[data-theme="dark"] .onboarding-page .onboarding-source-entry{border-color:#2a3946}
+html[data-theme="dark"] .onboarding-page .onboarding-source-dropdown>summary{background:#182620;border-color:#365242;color:#b8dcc8}
+html[data-theme="dark"] .onboarding-page .onboarding-source-dropdown>summary:hover,html[data-theme="dark"] .onboarding-page a.onboarding-source-option:hover{background:#21362c}
+html[data-theme="dark"] .onboarding-page .onboarding-source-option,html[data-theme="dark"] .onboarding-page .onboarding-source-option-name{color:#d4e2d9}
+html[data-theme="dark"] .onboarding-page .onboarding-source-option-actions button,html[data-theme="dark"] .onboarding-page .onboarding-source-option-actions>a{color:#9ad7c4}
+html[data-theme="dark"] .onboarding-page .onboarding-source-option-actions>a{border-color:#3c5849}
+html[data-theme="dark"] .onboarding-page :is(.onboarding-source-option-actions small,.onboarding-source-dropdown-empty){color:#aebbc6}

@@ -5,7 +5,7 @@ import type { Role } from "@/lib/types";
 
 interface RoleState {
   role: Role | null;
-  setRole: (role: Role) => void;
+  setRole: (role: Role | null) => void;
   hydrateRole: () => void;
 }
 
@@ -17,7 +17,10 @@ export const useRoleStore = create<RoleState>((set) => ({
   setRole: (role) => {
     set({ role });
     if (typeof window !== "undefined") {
-      try { window.localStorage.setItem(ROLE_STORAGE_KEY, role); } catch { /* Keep the active session usable when storage is unavailable. */ }
+      try {
+        if (role) window.localStorage.setItem(ROLE_STORAGE_KEY, role);
+        else window.localStorage.removeItem(ROLE_STORAGE_KEY);
+      } catch { /* Keep the active session usable when storage is unavailable. */ }
     }
   },
   hydrateRole: () => {

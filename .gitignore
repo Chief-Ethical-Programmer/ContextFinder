@@ -9,6 +9,7 @@
 # Dependencies and generated application output
 **/node_modules/
 **/.next/
+**/.next-dev/
 **/out/
 **/dist/
 **/build/
@@ -28,5 +29,6 @@
 # Local editor and operating-system files
 .vscode/
 .idea/
+.vercel/
 .DS_Store
 Thumbs.db

@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: contextfinder-api
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./Backend/Dockerfile
+    dockerContext: ./Backend
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: contextfinder-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DEMO_MODE
+        value: "false"
+      - key: LLM_MODE
+        value: live
+      - key: LLM_MODEL
+        value: gemini-3.5-flash-lite
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: ADMIN_SIGNUP_CODE
+        sync: false
+      - key: FRONTEND_ORIGINS
+        sync: false
+      - key: ORCHESTRATOR
+        value: inline
+      - key: N8N_SERVICE_TOKEN
+        generateValue: true
+      - key: ENABLE_VECTOR_SEARCH
+        value: "false"
+
+databases:
+  - name: contextfinder-db
+    databaseName: contextfinder
+    user: contextfinder
+    plan: free
+    region: singapore
+    ipAllowList: []

@@ -1,0 +1,26 @@
+import Link from "next/link";
+import { ArrowLeft, ArrowRight, CheckCircle2, Clock3, LockKeyhole, MessageSquareText, ShieldCheck, UserRound } from "lucide-react";
+import { getClaims, getEvidence, getTransition } from "@/lib/api/client";
+import { ClaimCard } from "@/components/shared/claim-card";
+
+export const dynamic = "force-dynamic";
+
+export default async function ApprovedPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const [transition, claims, evidence] = await Promise.all([getTransition(id), getClaims(id), getEvidence(id)]);
+  if (!transition) return <div className="page-wrap placeholder-page"><div className="placeholder-card"><h1>Transition not found</h1><p>This handover may have been removed or the address is incorrect.</p><Link className="back-link" href="/admin"><ArrowLeft size={14} />Back to transitions</Link></div></div>;
+  const approved = transition.status === "Approved";
+  const includedClaims = claims.filter((claim) => claim.status === "Approved");
+  return <div className="page-wrap approved-page">
+    <div className="breadcrumb"><Link href="/admin">Workspace</Link><span>/</span><span>{transition.project}</span><span>/</span><span>Approved handover</span></div>
+    <div className="approved-topline"><Link href="/admin" className="back-link"><ArrowLeft size={14} />All transitions</Link><span className={`approved-live-state ${approved ? "" : "approved-not-published"}`}><span className="status-dot" />{approved ? "Published handover" : "Not published"}</span></div>
+    <section className="approved-hero"><div className="approved-hero-icon"><ShieldCheck size={20} /></div><div className="approved-hero-main"><div className="eyebrow"><span className="eyebrow-line" />{approved ? `VERSION ${transition.version} · APPROVED HANDOVER` : "HANDOVER PREVIEW"}</div><h1>{transition.project}</h1><p>{approved ? "The reviewed handover is ready for its intended recipient." : "This read-only view becomes available to the recipient only after publish."}</p></div><div className="approved-version-mark"><span>VERSION</span><strong>{transition.version}</strong></div></section>
+    <div className="approved-info-grid"><section className="approved-info-card"><div className="approved-card-kicker"><UserRound size={14} /> TARGET ROLE</div><strong>{transition.incomingRole}</strong><span>Prepared for {transition.incoming.name}</span></section><section className="approved-info-card"><div className="approved-card-kicker"><Clock3 size={14} /> PUBLISHED</div><strong>{approved ? transition.publishedAt ?? "Publish time unavailable" : "Waiting for publish"}</strong><span>{approved ? `Version ${transition.version} is the current handover.` : "No handover content is visible to the incoming person yet."}</span></section><section className="approved-info-card"><div className="approved-card-kicker"><CheckCircle2 size={14} /> RECEIPT</div><strong>{transition.acknowledgedAt ? `Acknowledged by ${transition.acknowledgedBy}` : "Waiting for acknowledgement"}</strong><span>{transition.acknowledgedAt ?? "The incoming person can acknowledge the published version."}</span></section></div>
+    <div className="approved-content-grid"><section className="approved-remarks-card"><div className="approved-section-title"><MessageSquareText size={15} /><h2>Reviewer remarks</h2></div><p>{transition.reviewerRemarks || "No reviewer remarks were added for this version."}</p><div className="remarks-version-note"><LockKeyhole size={12} />Remarks are saved with this published version.</div></section><section className="approved-people-card"><div className="approved-section-title"><UserRound size={15} /><h2>Handover path</h2></div><div className="approved-person-line"><span className="person-avatar avatar-indigo">{transition.departing.initials}</span><span><small>FROM</small><strong>{transition.departing.name}</strong></span></div><div className="approved-path-arrow"><ArrowRight size={14} /></div><div className="approved-person-line"><span className="person-avatar avatar-mint">{transition.incoming.initials}</span><span><small>TO · {transition.incomingRole}</small><strong>{transition.incoming.name}</strong></span></div></section></div>
+    <div className="approved-claims-heading"><div><span className="eyebrow">VERSIONED CONTENT</span><h2>Approved claims <span>{includedClaims.length}</span></h2><p>Only claims reviewed and approved by a person are included.</p></div><Link href={`/admin/transitions/${transition.id}/versions`} className="text-link">View version history <ArrowRight size={14} /></Link></div>
+    {!approved && <div className="approved-empty-state"><LockKeyhole size={16} /><span>Publishing is required before this handover is visible to {transition.incoming.name}.</span></div>}
+    <div className="approved-claims-list">{approved && includedClaims.length ? includedClaims.map((claim) => <ClaimCard key={claim.id} claim={claim} evidenceItems={evidence} />) : approved ? <div className="approved-empty-state"><ShieldCheck size={16} /><span>No claims were approved for this version.</span></div> : null}</div>
+    <div className="approved-version-footer"><span><ShieldCheck size={14} />Human reviewed before sharing</span><span>Version {transition.version} · {transition.project}</span></div>
+  </div>;
+}
+

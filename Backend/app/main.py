@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from contextlib import asynccontextmanager
 
@@ -24,14 +25,23 @@ from app.core.errors import (
 )
 from app.core.middleware import RequestContextMiddleware
 from app.db.session import engine
+from app.services.access_expiry import access_expiry_worker
 
 logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    yield
-    await engine.dispose()
+    expiry_task = asyncio.create_task(access_expiry_worker())
+    try:
+        yield
+    finally:
+        expiry_task.cancel()
+        try:
+            await expiry_task
+        except asyncio.CancelledError:
+            pass
+        await engine.dispose()
 
 
 app = FastAPI(title="ContextFinder API", version="0.1.0", root_path="", lifespan=lifespan)

@@ -51,6 +51,7 @@ async def signup(payload: SignupRequest, db: Annotated[AsyncSession, Depends(get
         email=payload.email,
         password_hash=hash_password(payload.password),
         role=payload.role,
+        team=payload.team or "",
     )
     db.add(user)
     try:

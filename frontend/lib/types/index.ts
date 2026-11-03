@@ -25,8 +25,10 @@ export type SourceKind = "GitHub" | "Slack" | "Drive" | "Meeting notes";
 
 export interface Evidence {
   id: string;
+  claimId?: string;
   source: SourceKind;
   author: string;
+  fileName?: string;
   happenedAt: string;
   excerpt: string;
   href?: string;
@@ -70,8 +72,17 @@ export interface Claim {
   evidenceIds: string[];
   history: ClaimHistoryEntry[];
   reviewerNote?: string;
+  responseNote?: string;
+  followUps?: ClaimFollowUp[];
   proposal: boolean;
   status: "Pending review" | "Approved" | "Rejected";
+}
+
+export interface ClaimFollowUp {
+  source: "Gemini" | "Reviewer";
+  question: string;
+  answer?: string;
+  status: "Answered" | "Awaiting answer" | "Draft saved" | "Skipped";
 }
 
 export interface SourceConnection {
@@ -79,9 +90,18 @@ export interface SourceConnection {
   transitionId: string;
   kind: SourceKind;
   name: string;
+  href?: string;
+  files: SourceFile[];
   access: AccessLevel;
   linkedClaimCount: number;
   connected: boolean;
+}
+
+export interface SourceFile {
+  recordId: string;
+  name: string;
+  href?: string;
+  claimIds: string[];
 }
 
 export interface Person {
@@ -97,13 +117,14 @@ export interface ProjectMember {
   name: string;
   title: string;
   initials: string;
-  involvement: "Current member" | "Departing" | "Incoming";
+  involvement: "Current member" | "Departing" | "Incoming" | "Reviewer";
 }
 
 export interface Project {
   id: string;
   code: string;
   name: string;
+  team?: string;
   supervisor: string;
   members: ProjectMember[];
 }
@@ -112,11 +133,13 @@ export interface Transition {
   id: string;
   project: string;
   projectCode: string;
-  status: "Review" | "Approved" | "In progress";
+  team: string;
+  status: "Review" | "Approved" | "In progress" | "Awaiting project approval" | "Waiting for leaver answers" | "Awaiting reviewer assignment" | "Awaiting admin approval";
   departing: Person;
   incoming: Person;
   incomingRole: string;
-  daysRemaining: number;
+  accessDaysRemaining: number;
+  accessExpiresAt?: string;
   accessReady: boolean;
   teamAssigned: boolean;
   claimCount: number;
@@ -124,6 +147,8 @@ export interface Transition {
   blockingCount: number;
   version: number;
   publishedAt?: string;
+  reviewer?: { id: string; name: string; email: string };
+  reviewerCandidates?: Array<{ id: string; name: string; email: string; role: string; teams: string[] }>;
   reviewerRemarks?: string;
   acknowledgedAt?: string;
   acknowledgedBy?: string;
@@ -162,6 +187,7 @@ export interface OnboardingView {
   sources: SourceConnection[];
   hiddenItemCount: number;
   reviewerRemarks?: string;
+  canPreviewRoles?: boolean;
 }
 
 export interface AuditEvent {
