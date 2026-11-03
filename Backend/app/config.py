@@ -12,14 +12,12 @@ class Settings(BaseSettings):
     jwt_expire_minutes: int = 30
     demo_mode: bool = False
     admin_signup_code: str | None = None
-    orchestrator: str = "inline"
     llm_mode: str = "live"
     llm_model: str = "gemini-3.5-flash-lite"
     anthropic_api_key: str | None = None
     gemini_api_key: str | None = None
     github_token: str | None = None
     github_repo: str | None = None
-    n8n_service_token: str = "development-only-service-token"
     enable_vector_search: bool = False
     frontend_origins: str = "http://localhost:3000"
 

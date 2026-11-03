@@ -1,3 +1,0 @@
-[
-  {"id":"commit-3-modules","author":"Alex","title":"Merge three Terraform modules","body":"Merged payments, catalog, and orders modules; eight modules remain.","status":"merged","url":"https://github.synthetic/platform-infrastructure/commit/commit-3-modules"}
-]

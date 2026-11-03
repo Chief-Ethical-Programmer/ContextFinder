@@ -15,7 +15,6 @@ from app.api.v1.exit_questions import router as exit_router
 from app.api.v1.foundation import router as foundation_router
 from app.api.v1.handover import router as handover_router
 from app.api.v1.ingestion import router as ingestion_router
-from app.api.v1.internal import router as internal_router
 from app.api.v1.review import router as review_router
 from app.config import get_settings
 from app.core.errors import (
@@ -65,7 +64,6 @@ app.include_router(claims_router, prefix="/api/v1")
 app.include_router(exit_router, prefix="/api/v1")
 app.include_router(review_router, prefix="/api/v1")
 app.include_router(handover_router, prefix="/api/v1")
-app.include_router(internal_router, prefix="/api/v1")
 
 
 @app.get("/api/v1/health", tags=["ops"])

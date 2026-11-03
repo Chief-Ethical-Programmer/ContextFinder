@@ -16,7 +16,7 @@ The current ContextFinder upload flow supports public GitHub repositories and do
 
 ## Important GitHub behavior
 
-The GitHub connector reads a **public** repository's README, up to 50 pull requests, up to 50 issues, and up to 50 commits. It does not crawl every file in the repository. The `issue-drafts.md` and `pull-request-drafts.md` files are copy-ready descriptions: create those issues and pull requests in the public GitHub repository after you publish it if you want GitHub API records for them. Add a few meaningful commits as well. Do not put credentials in Git history.
+The GitHub connector reads up to 10 supported text files from the **public** repository's default branch, up to 64 KB per file and 150 KB total. It does not read issue, pull-request, or commit history. Keep the files at the repository root so they are among the files considered for ingestion. Do not put credentials in Git history.
 
 ## Deliberate demo findings
 
@@ -24,4 +24,4 @@ The GitHub connector reads a **public** repository's README, up to 50 pull reque
 - Delivery pipeline sources disagree about the canary percentage, soak time, and whether promotion/rollback is automatic; approval evidence is missing.
 - Observability sources disagree about latency thresholds and the on-call owner; the escalation runbook is missing.
 
-Use the upload guide before publishing or importing the packs.
+Use the demo project-pack section in the repository's root `README.md` for upload steps and the public GitHub source links.

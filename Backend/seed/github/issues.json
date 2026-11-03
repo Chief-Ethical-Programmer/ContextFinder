@@ -1,3 +1,0 @@
-[
-  {"id":"issue-77","author":"Sam","title":"Recurring service latency alerts","body":"Investigate Prometheus alerts after deployment and document the worker restart workaround.","status":"open","url":"https://github.synthetic/platform-infrastructure/issues/issue-77"}
-]
