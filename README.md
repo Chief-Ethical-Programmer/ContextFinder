@@ -71,15 +71,15 @@ A fresh database created from this repository does **not** automatically contain
 
 Each folder is a separate fictional DevOps project. It includes a `github-repo/` source pack, upload-ready files under `documents/`, and (for illustration only) a `slack-export/` JSON sample.
 
-| Project folder | Demo topic | Documents to select |
-| --- | --- | --- |
-| `demo-data/devops-team/platform-infrastructure/` | Terraform module migration, state ownership, and incomplete rollback evidence | `architecture.md`, `evidence-gap-register.pdf`, `handover-brief.docx`, `migration-checklist.txt` |
-| `demo-data/devops-team/delivery-pipeline/` | CI/CD, canary rollout, and rollback behavior | `evidence-gap-register.pdf`, `handover-brief.docx`, `release-handoff.txt`, `release-runbook.md` |
-| `demo-data/devops-team/observability-alerting/` | Alert thresholds, escalation, and service ownership | `alert-ownership.md`, `evidence-gap-register.pdf`, `handover-brief.docx`, `on-call-notes.txt` |
+| Project folder | Public GitHub source | Demo topic | Documents to select |
+| --- | --- | --- | --- |
+| `demo-data/devops-team/platform-infrastructure/` | [platform-infrastructure-demo](https://github.com/Chief-Ethical-Programmer/platform-infrastructure-demo) | Terraform module migration, state ownership, and incomplete rollback evidence | `architecture.md`, `evidence-gap-register.pdf`, `handover-brief.docx`, `migration-checklist.txt` |
+| `demo-data/devops-team/delivery-pipeline/` | [delivery-pipeline-demo](https://github.com/Chief-Ethical-Programmer/delivery-pipeline-demo) | CI/CD, canary rollout, and rollback behavior | `evidence-gap-register.pdf`, `handover-brief.docx`, `release-handoff.txt`, `release-runbook.md` |
+| `demo-data/devops-team/observability-alerting/` | [observability-alerting-demo](https://github.com/Chief-Ethical-Programmer/observability-alerting-demo) | Alert thresholds, escalation, and service ownership | `alert-ownership.md`, `evidence-gap-register.pdf`, `handover-brief.docx`, `on-call-notes.txt` |
 
 ### Add the demo sources
 
-1. To use GitHub evidence, create a **public** GitHub repository for a pack and copy the contents of its `github-repo/` directory into the repository root. Enter that repository URL in the project's source form. The connector reads repository data such as its README, issues, pull requests, and commits; draft issue and pull-request descriptions in the pack do not create those GitHub records automatically.
+1. Use the linked public GitHub repository for the selected pack and paste its URL or `owner/repository` in the project's source form. If you make your own copy, create a public repository and copy the contents of that pack's `github-repo/` directory into the repository root. The connector reads repository data such as its README, issues, pull requests, and commits; draft issue and pull-request descriptions in the pack do not create those GitHub records automatically.
 2. In the departing-member workflow, create the project request with its project name, team, and brief. Select only the matching pack's files from its `documents/` directory. Do not mix project packs.
 3. Submit the sources for analysis. Reviewers can examine the AI proposals and request more information from the departing member. The reviewer gives final review approval; the administrator handles assignment to an incoming member.
 4. Follow [the demo upload guide](demo-data/devops-team/UPLOAD_GUIDE.md) for the full source-pack workflow.
