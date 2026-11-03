@@ -1,57 +1,110 @@
 # ContextFinder
 
-ContextFinder captures project knowledge during team transitions. Departing members submit project sources and answers; reviewers verify claims; administrators manage reviewer and incoming-member assignments; approved handovers are available to the assigned incoming member.
+**Evidence-led project handovers for teams in transition.** ContextFinder collects project knowledge from departing team members, uses Gemini to organize source evidence into proposed claims and questions, and gives human reviewers and administrators control over approval and handover.
 
-## Project layout
+> This repository's demo source packs contain fictional data. The local demo login below is intentionally simple; never reuse it for a hosted deployment or real organization.
 
-- `frontend/` — Next.js application. Set `BACKEND_API_URL` on the hosting platform to the backend URL ending in `/api/v1`.
-- `Backend/` — FastAPI API, PostgreSQL models and migrations, ingestion, Gemini processing, and review workflow.
-- `demo-data/` — synthetic source packs for manual demo uploads. These are not automatically imported into the database.
-- `render.yaml` — Render blueprint for the API and a free PostgreSQL database.
+## What it does
 
-## Run locally
+- Lets a departing member request a project, name its team, add a brief, and submit source material.
+- Reads public GitHub repository activity and uploaded project documents, then asks Gemini to propose claims and follow-up questions.
+- Lets a team lead or reviewer check claims, request more detail, and approve the handover.
+- Lets an administrator assign reviewers and match approved handovers with incoming members by team.
+- Stores application users, projects, source records, claims, reviews, and handovers in PostgreSQL.
 
-1. Copy `Backend/.env.example` to `Backend/.env` and fill in the needed settings. Keep `.env` files out of Git.
-2. Start PostgreSQL and the API with Docker Compose from the repository root:
+AI results are proposals. A human reviewer makes the review decisions.
+
+## Repository map
+
+| Path | Contents |
+| --- | --- |
+| `frontend/` | Next.js web application |
+| `Backend/` | FastAPI API, database models and migrations, GitHub/document ingestion, and Gemini processing |
+| `demo-data/devops-team/` | Three fictional project packs for manual demo uploads |
+| `render.yaml` | Render API and PostgreSQL deployment blueprint |
+| `MVP_ROUND2_ALIGNMENT_REPORT.md` | MVP and requirements alignment report |
+| `PROJECT_STATUS_REPORT.md` | Project status and known limitations |
+
+## Run the demo locally
+
+### Requirements
+
+- Docker Desktop with Docker Compose
+- Node.js and npm
+- A Gemini API key for live analysis
+
+### Start the backend
+
+1. Copy `Backend/.env.example` to `Backend/.env`.
+2. Set `GEMINI_API_KEY` to your key and set a local `ADMIN_SIGNUP_CODE` if creating an admin in a fresh database. Keep this `.env` file private; it is ignored by Git.
+3. From the repository root, start PostgreSQL and the API:
 
    ```powershell
    docker compose -f Backend/docker-compose.yml up -d --build api
    ```
 
-3. In a second terminal:
+   The API health check is available at [http://localhost:8000/api/v1/health](http://localhost:8000/api/v1/health).
 
-   ```powershell
-   cd frontend
-   npm ci
-   npm run dev
-   ```
+### Start the frontend
 
-4. Open `http://localhost:3000`.
+In a second terminal:
 
-## Deploy a demo
+```powershell
+cd frontend
+npm ci
+npm run dev
+```
 
-### Backend and database on Render
+Open [http://localhost:3000](http://localhost:3000).
 
-1. Push this repository to GitHub without committing any `.env` files.
-2. In Render, create a Blueprint from the repository root. Render will read `render.yaml` and provision the API plus PostgreSQL.
-3. Supply `GEMINI_API_KEY`, `ADMIN_SIGNUP_CODE`, and `FRONTEND_ORIGINS` when prompted. After Vercel gives you its deployment URL, set `FRONTEND_ORIGINS` to that origin, for example `https://your-app.vercel.app`.
-4. After the API is healthy, sign up the first admin account using the configured admin signup code.
+### Demo administrator login
 
-The Render API URL will look like `https://contextfinder-api.onrender.com`.
+The reset local workspace currently has this administrator account:
 
-### Frontend on Vercel
+| Email | Password | Use |
+| --- | --- | --- |
+| `admin@contextfinder.demo` | `admin123` | Local demo only |
 
-1. Import the same GitHub repository as a Vercel project.
-2. Set the project Root Directory to `frontend` and keep the Next.js framework preset and default build settings.
-3. Add the server-side environment variable `BACKEND_API_URL=https://contextfinder-api.onrender.com/api/v1`, replacing the hostname with the URL Render assigned.
-4. Deploy and then update `FRONTEND_ORIGINS` in Render with the Vercel origin.
+A fresh database created from this repository does **not** automatically contain this account. For a fresh local setup, configure `ADMIN_SIGNUP_CODE` in `Backend/.env`, open `/signup`, create the administrator account, then sign in. The credentials above are not production credentials and are not provisioned by Render.
 
-The frontend proxies authenticated API requests through Next.js, so `BACKEND_API_URL` must be configured on Vercel and must not use a `NEXT_PUBLIC_` prefix.
+## Demo project packs
 
-## Free-tier constraints
+Each folder is a separate fictional DevOps project. It includes a `github-repo/` source pack, upload-ready files under `documents/`, and (for illustration only) a `slack-export/` JSON sample.
 
-This arrangement is suitable for a judge/demo deployment, not dependable production hosting. Render free web services spin down after 15 minutes idle and can take about a minute to wake. Free Render Postgres is limited to 1 GB, has no backups, and expires 30 days after creation. Vercel Hobby is limited to personal, non-commercial use.
+| Project folder | Demo topic | Documents to select |
+| --- | --- | --- |
+| `demo-data/devops-team/platform-infrastructure/` | Terraform module migration, state ownership, and incomplete rollback evidence | `architecture.md`, `evidence-gap-register.pdf`, `handover-brief.docx`, `migration-checklist.txt` |
+| `demo-data/devops-team/delivery-pipeline/` | CI/CD, canary rollout, and rollback behavior | `evidence-gap-register.pdf`, `handover-brief.docx`, `release-handoff.txt`, `release-runbook.md` |
+| `demo-data/devops-team/observability-alerting/` | Alert thresholds, escalation, and service ownership | `alert-ownership.md`, `evidence-gap-register.pdf`, `handover-brief.docx`, `on-call-notes.txt` |
 
-Vercel Functions also cap request and response bodies at 4.5 MB. This app currently allows individual document uploads up to 10 MB through a Next.js API proxy, so uploads over Vercel's 4.5 MB limit will fail unless the app's upload flow is changed or those uploads use a direct-to-storage path.
+### Add the demo sources
 
-Before deployment, rotate any Gemini API key that has been pasted into a chat, issue, or other shared location, then enter the replacement only in Render's environment settings. Never commit `Backend/.env` or put API keys in frontend environment variables.
+1. To use GitHub evidence, create a **public** GitHub repository for a pack and copy the contents of its `github-repo/` directory into the repository root. Enter that repository URL in the project's source form. The connector reads repository data such as its README, issues, pull requests, and commits; draft issue and pull-request descriptions in the pack do not create those GitHub records automatically.
+2. In the departing-member workflow, create the project request with its project name, team, and brief. Select only the matching pack's files from its `documents/` directory. Do not mix project packs.
+3. Submit the sources for analysis. Reviewers can examine the AI proposals and request more information from the departing member. The reviewer gives final review approval; the administrator handles assignment to an incoming member.
+4. Follow [the demo upload guide](demo-data/devops-team/UPLOAD_GUIDE.md) for the full source-pack workflow.
+
+**Slack ingestion is not currently supported.** The `slack-export/` JSON files are examples for reference only; do not select them as documents. All project pack contents are synthetic. Keep real Slack exports, private repositories, personal data, credentials, and confidential documents out of this public demo.
+
+## Deploy a judge/demo site
+
+### Render API and database
+
+1. In Render, create a Blueprint using this GitHub repository and its root `render.yaml`.
+2. Provide `GEMINI_API_KEY`, `ADMIN_SIGNUP_CODE`, and `FRONTEND_ORIGINS` when prompted. After Vercel creates the frontend URL, set `FRONTEND_ORIGINS` to that exact site origin.
+3. Wait for the API health check to pass. Use the admin signup code to register the first hosted administrator; the local demo account above is not copied to the hosted database.
+
+### Vercel frontend
+
+1. Import this GitHub repository in Vercel and set **Root Directory** to `frontend`.
+2. Add `BACKEND_API_URL` as a server-side environment variable with the Render API URL ending in `/api/v1`, for example `https://your-api.onrender.com/api/v1`. Do not prefix this variable with `NEXT_PUBLIC_`.
+3. Deploy, then set the resulting Vercel origin in Render's `FRONTEND_ORIGINS` environment variable and redeploy the API.
+
+Render free services can sleep when idle, and its free PostgreSQL databases expire after 30 days. Vercel Functions limit request bodies to 4.5 MB, while this app currently permits documents up to 10 MB; a file over Vercel's limit can fail during upload. These free tiers are for demos, not reliable production hosting. Vercel Hobby is for personal, non-commercial projects.
+
+## Security before deployment
+
+- Never commit `.env` files. Use the platform's secret environment settings for Gemini keys, signup codes, and database URLs.
+- Rotate any Gemini API key that has been shared in a chat, issue, screenshot, or other public location before using it for deployment.
+- Do not use `admin@contextfinder.demo` / `admin123` on any hosted instance.
+- Upload only synthetic demo sources to a public GitHub repository or send them to Gemini. Do not use confidential company data in this demo.

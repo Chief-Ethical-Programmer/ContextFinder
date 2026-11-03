@@ -1,26 +1,37 @@
-# Publish and upload the demo packs
+# Demo source-pack guide
 
-## 1. Create three public GitHub repositories
+The three project packs are independent, fictional source sets. Use one pack per project request so that claims and evidence do not get mixed.
 
-Create one empty public repository per `github-repo` folder using the matching project slug as its name. Upload that folder's contents to the repository root. For example, the README in `platform-infrastructure/github-repo` should become the public repository's root `README.md`.
+## Prepare GitHub sources
 
-The GitHub connector only accepts public repositories. In ContextFinder, enter `your-github-name/platform-infrastructure` (and the equivalent name for each other pack). Do not add a GitHub token for these public demo repositories.
+For a pack that should include GitHub evidence:
 
-For realistic GitHub evidence, create the issues described in each `issue-drafts.md`, open the pull requests described in `pull-request-drafts.md`, and make a few small commits. Those files are drafts; uploading them does not create GitHub issues or pull requests automatically.
+1. Create a public GitHub repository for that project.
+2. Copy the contents of that project's `github-repo/` folder to the root of the new repository. Do not upload the parent folder itself as an extra nesting level.
+3. In the ContextFinder project source form, paste the public repository URL or `owner/repository`.
 
-## 2. Upload the project documents
+The connector reads public repository metadata, the README, issues, pull requests, and commits. Files named `issue-drafts.md` and `pull-request-drafts.md` are descriptions only; create those issues and pull requests in GitHub if you want them included as GitHub records. Never add a token or real credentials to these synthetic repositories.
 
-Select the matching `.md`, `.txt`, `.docx`, or `.pdf` files from that project's `documents` directory. Do not mix packs between transitions; each pack is internally labeled with its project name. Slack sample JSON files are retained as reference material only and are not accepted by the app.
+## Upload project documents
 
-## 3. Run a separate handover for each project
+Select the supported files from that same pack's `documents/` directory in the departing-member project source form. Supported file types are PDF, DOCX, Markdown, and text. You can select individual files or the directory picker. Keep each file under the app's 10 MB limit.
 
-Create one transition per pack, select that pack's public GitHub repository and local documents, then run ingestion. Repeat for all three projects. A reviewer should compare each AI proposal with the attached source evidence, resolve conflicts, ask the leaver for missing context when useful, and publish only after the review is complete.
+The `slack-export/` folders contain fictional JSON examples for reference. Slack ingestion is not part of the current app, so these JSON files are not uploaded or analyzed.
 
-The app currently requires the project, departing member, and incoming member to already exist in its database before a transition can be created. This folder is source material; it does not create app users or project memberships.
+## Run one handover per pack
 
-## Safe publishing checklist
+1. Sign in as a registered departing member.
+2. Request the project with its name, owning team, and short project brief.
+3. Add only that project's public GitHub repository and documents, confirm the source-processing notice, then submit to start analysis.
+4. The departing member answers the generated questions. An administrator assigns a registered team lead/reviewer; that reviewer checks the claims, can request more detail, and gives final review approval.
+5. After reviewer approval, the administrator can assign the handover to an incoming member who registered for the matching team.
 
-- Keep the files exactly fictional; do not add real credentials, internal hostnames, real Slack exports, or private repository links.
-- Read the public repository README and issue/PR text before publishing.
-- Keep all GitHub repositories public only if you are comfortable with these synthetic contents being public.
-- Gemini receives the selected source text when you run the app's extraction flow. The demo packs contain only invented information.
+The project folders contain sources only. They do not create app users, team memberships, or GitHub repositories automatically. A new clone has an empty database; register the demo users in the app before walking through the complete flow.
+
+## Project pack contents
+
+- `platform-infrastructure/`: Terraform module migration, state ownership, and rollback evidence gaps.
+- `delivery-pipeline/`: CI/CD, canary rollout, and rollback behavior.
+- `observability-alerting/`: alert thresholds, escalation, and service ownership.
+
+All names, messages, code, and operational details in these folders are fictional. Do not add real employee data, internal infrastructure, confidential documents, or private repository links before making a source repository public or sending sources for Gemini processing.
