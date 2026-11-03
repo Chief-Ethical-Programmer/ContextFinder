@@ -1,0 +1,6 @@
+# Fictional alert example only. Not intended to be loaded into Prometheus.
+demo_rule:
+  alert: DemoCheckoutLatency
+  expr_description: "fictional checkout p95 latency exceeds a disputed threshold"
+  readme_threshold_ms: 500
+  readme_duration: 5m

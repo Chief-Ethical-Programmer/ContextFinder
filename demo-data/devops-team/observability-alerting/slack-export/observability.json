@@ -1,0 +1,8 @@
+[
+  {"user":"Alex","ts":"2026-09-22T08:40:00Z","text":"The draft alert I saw pages at 700 ms p95 for 3 minutes, not 500 ms for 5. I can't find the merge commit."},
+  {"user":"Ryan","ts":"2026-09-22T08:47:00Z","text":"README says Platform owns first response. The channel topic says SRE rotation. Which should the handover show?"},
+  {"user":"Priya","ts":"2026-09-22T08:55:00Z","text":"The escalation matrix is missing. Keep the owner as unresolved until an approved source is attached."},
+  {"user":"Alex","ts":"2026-09-22T09:06:00Z","text":"Platform can investigate cluster saturation, but I don't know who acknowledges checkout pages overnight."},
+  {"user":"Ryan","ts":"2026-09-22T09:15:00Z","text":"There is no pager schedule export in this pack. We need a synthetic owner mapping before sign-off."},
+  {"user":"Priya","ts":"2026-09-22T09:22:00Z","text":"Please attach the alert rule revision and escalation matrix as separate evidence. A chat memory isn't enough."}
+]

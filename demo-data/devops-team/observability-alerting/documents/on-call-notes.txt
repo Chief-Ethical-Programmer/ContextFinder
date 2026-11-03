@@ -1,0 +1,11 @@
+SIGNAL WATCH — FICTIONAL ON-CALL NOTES
+
+Alert: checkout p95 latency
+README threshold: above 500 ms for 5 minutes
+Slack draft threshold: above 700 ms for 3 minutes
+README first response: Platform
+Channel topic: SRE rotation
+
+Evidence gap: no approved escalation matrix, merged alert rule, or sample incident is included. Do not invent an on-call owner. Ask Priya to request the missing evidence before sign-off.
+
+All project, service, and team details are fabricated for a software demo.
